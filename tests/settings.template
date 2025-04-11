@@ -1,0 +1,11 @@
+<?php
+
+namespace test;
+
+class settings
+{
+    public array $settings = [
+        "domain" => "",
+        "serviceUserToken" => ""
+    ];
+}

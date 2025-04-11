@@ -1,0 +1,7 @@
+# Folder
+/vendor
+.cache
+
+# Files
+tests/settings.php
+.bak

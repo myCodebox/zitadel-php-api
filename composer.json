@@ -1,0 +1,46 @@
+{
+    "name": "mycodebox/zitadel-php-api",
+    "description": "Zitadel PHP API",
+    "keywords": ["zitadel", "php", "api"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Codebox",
+            "email": "myCodebox@users.noreply.github.com",
+            "homepage": "https://github.com/myCodebox"
+        }
+    ],
+    "require": {
+        "ext-curl": "*",
+        "ext-json": "*",
+        "chillerlan/php-qrcode": "^5.0"
+    },
+    "require-dev": {
+        "filp/whoops": "^2.18",
+        "phpdocumentor/shim": "^3.7",
+        "phpunit/phpunit": "^11.5",
+        "symfony/var-dumper": "^7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZitadelPhpApi\\": "src/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "8.2"
+        },
+        "sort-packages": true,
+        "process-timeout": 0,
+        "allow-plugins": {
+            "phpdocumentor/shim": true
+        }
+    },
+    "scripts": {
+        "serve": "php -S localhost:8050",
+        "dump": "composer dump-autoload",
+        "docs": "php vendor/bin/phpdoc -c phpdoc.xml",
+        "tests": "phpunit -c phpunit.xml"
+    }
+}
