@@ -1,6 +1,6 @@
 # Zitadel PHP API
 
-This is a Zitadel PHP API library. The library is based on the [Zitadel API](https://zitadel.com/docs/apis/introduction/).
+With this library you can easily communicate between your PHP projects and Zitadel over a serviceUser. The wrapper is based on the [Zitadel API](https://zitadel.com/docs/apis/introduction/).
 
 ## Installation
 
