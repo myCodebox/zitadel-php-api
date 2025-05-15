@@ -73,7 +73,8 @@ class Avatar
     }
 
     /**
-     * Add the avatar to the user. Needs the userToken
+     * Add the avatar to the user. Needs the `userToken`
+     * ! The user token must have the scope 'urn:zitadel:iam:org:project:id:zitadel:aud'
      * 
      * @throws Exception If there's an error
      * @return void
@@ -89,6 +90,7 @@ class Avatar
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 0,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => $this->postData,
@@ -98,9 +100,12 @@ class Avatar
                 "Authorization: Bearer $token"
             ),
         ));
-
-        $response = json_decode(curl_exec($curl));
+        
+        // $response = json_decode(curl_exec($curl));
+        $response = curl_exec($curl);
         curl_close($curl);
+        
+        dump($response); exit;
 
         if (isset($response->code)) {
             throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
@@ -108,7 +113,7 @@ class Avatar
     }
 
     /**
-     * Remove the user's avatar.
+     * Remove the user's avatar with the `serviceUserToken`.
      *
      * @return void
      * @throws Exception If an error occurs during the request to remove the avatar from the server.

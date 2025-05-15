@@ -12,6 +12,7 @@ class PasswordComplexity
     private array $settings;
     private ?string $orgId = null;
     private ?int $minLength;
+    private bool $rawPasswordSettings;
     private bool $requiresUppercase;
     private bool $requiresLowercase;
     private bool $requiresNumber;
@@ -100,6 +101,16 @@ class PasswordComplexity
     }
 
     /**
+     * Returns the raw password settings as a JSON string.
+     *
+     * @return string The raw password settings as a JSON string.
+     */
+    public function getRawPasswoerdSettings(): string
+    {
+        return $this->rawPasswordSettings;
+    }
+
+    /**
      * Send a GET request to the ZITADEL API to retrieve the current password complexity settings.
      *
      * @throws Exception If the request fails or the ZITADEL API returns an error.
@@ -132,6 +143,7 @@ class PasswordComplexity
             throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
         } else {
             $response = $response->settings;
+            $this->rawPasswordSettings = $response ?? "";
             $this->minLength = $response->minLength ?? null;
             $this->requiresUppercase = $response->requiresUppercase ?? "";
             $this->requiresLowercase = $response->requiresLowercase ?? "";

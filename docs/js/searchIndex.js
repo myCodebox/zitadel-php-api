@@ -751,6 +751,11 @@ Search.appendIndex(
             "summary": "Returns\u0020the\u0020resource\u0020owner\u0020type.",
             "url": "classes/ZitadelPhpApi-Settings-PasswordComplexity.html#method_getResourceOwnerType"
         },                {
+            "fqsen": "\\ZitadelPhpApi\\Settings\\PasswordComplexity\u003A\u003AgetRawPasswoerdSettings\u0028\u0029",
+            "name": "getRawPasswoerdSettings",
+            "summary": "Returns\u0020the\u0020raw\u0020password\u0020settings\u0020as\u0020a\u0020JSON\u0020string.",
+            "url": "classes/ZitadelPhpApi-Settings-PasswordComplexity.html#method_getRawPasswoerdSettings"
+        },                {
             "fqsen": "\\ZitadelPhpApi\\Settings\\PasswordComplexity\u003A\u003AsendRequest\u0028\u0029",
             "name": "sendRequest",
             "summary": "Send\u0020a\u0020GET\u0020request\u0020to\u0020the\u0020ZITADEL\u0020API\u0020to\u0020retrieve\u0020the\u0020current\u0020password\u0020complexity\u0020settings.",
@@ -770,6 +775,11 @@ Search.appendIndex(
             "name": "minLength",
             "summary": "",
             "url": "classes/ZitadelPhpApi-Settings-PasswordComplexity.html#property_minLength"
+        },                {
+            "fqsen": "\\ZitadelPhpApi\\Settings\\PasswordComplexity\u003A\u003A\u0024rawPasswordSettings",
+            "name": "rawPasswordSettings",
+            "summary": "",
+            "url": "classes/ZitadelPhpApi-Settings-PasswordComplexity.html#property_rawPasswordSettings"
         },                {
             "fqsen": "\\ZitadelPhpApi\\Settings\\PasswordComplexity\u003A\u003A\u0024resourceOwnerType",
             "name": "resourceOwnerType",
@@ -853,12 +863,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZitadelPhpApi\\User\\Avatar\u003A\u003Aadd\u0028\u0029",
             "name": "add",
-            "summary": "Add\u0020the\u0020avatar\u0020to\u0020the\u0020user.\u0020Needs\u0020the\u0020userToken",
+            "summary": "Add\u0020the\u0020avatar\u0020to\u0020the\u0020user.\u0020Needs\u0020the\u0020\u0060userToken\u0060\n\u0021\u0020The\u0020user\u0020token\u0020must\u0020have\u0020the\u0020scope\u0020\u0027urn\u003Azitadel\u003Aiam\u003Aorg\u003Aproject\u003Aid\u003Azitadel\u003Aaud\u0027",
             "url": "classes/ZitadelPhpApi-User-Avatar.html#method_add"
         },                {
             "fqsen": "\\ZitadelPhpApi\\User\\Avatar\u003A\u003Aremove\u0028\u0029",
             "name": "remove",
-            "summary": "Remove\u0020the\u0020user\u0027s\u0020avatar.",
+            "summary": "Remove\u0020the\u0020user\u0027s\u0020avatar\u0020with\u0020the\u0020\u0060serviceUserToken\u0060.",
             "url": "classes/ZitadelPhpApi-User-Avatar.html#method_remove"
         },                {
             "fqsen": "\\ZitadelPhpApi\\User\\Avatar\u003A\u003A\u0024settings",

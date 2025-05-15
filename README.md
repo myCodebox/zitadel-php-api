@@ -53,7 +53,7 @@ try {
 }
 ```
 
-**Add user avatar**
+**Add user avatar with path**
 ```php
 use ZitadelPhpApi\User\Avatar;
 
@@ -65,12 +65,44 @@ $settings = [
 
 // Add avatar
 $avatar = new Avatar($settings);
-$avatar->setUserId('313871513763708931');
+$avatar->setUserId('319154205375856643');
 $avatar->setImagePath('avatar_500x500.png');
 try {
     $avatar->add();
 } catch (Exception $e) {
     echo $e->getMessage();
+}
+```
+
+**Add user avatar with form**
+```html
+<form action="/" method="post" enctype="multipart/form-data">
+    <label for="file">Select an image:</label>
+    <input type="file" name="file" id="file">
+    <input type="submit" value="Upload Avatar">
+</form>
+```
+And the php Code:
+```php
+use ZitadelPhpApi\User\Avatar;
+
+$settings = [
+    "domain" => "",
+    "serviceUserToken" => "",
+    "userToken" => ""
+];
+
+// Add avatar
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Add avatar
+    $avatar = new Avatar($settings);
+    $avatar->setUserId('319154205375856643');
+    $avatar->setImagePath($_FILES['file']['tmp_name']);
+    try {
+        $avatar->add();
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
 }
 ```
 
