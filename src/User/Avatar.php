@@ -101,11 +101,8 @@ class Avatar
             ),
         ));
         
-        // $response = json_decode(curl_exec($curl));
-        $response = curl_exec($curl);
+        $response = json_decode(curl_exec($curl));
         curl_close($curl);
-        
-        dump($response); exit;
 
         if (isset($response->code)) {
             throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
