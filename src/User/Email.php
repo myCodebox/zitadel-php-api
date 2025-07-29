@@ -157,8 +157,6 @@ class Email
 
         if (isset($response->code)) {
             throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
-        } else {
-            $this->returnedVerificationCode = $response->verificationCode;
         }
     }
 
