@@ -106,6 +106,17 @@ class Edit
             $this->request["profile"]["gender"] = "GENDER_UNSPECIFIED";
         }
     }
+    
+    /** 
+     * Change the email address
+     * 
+     * @param $email string Email
+     * @return void
+     */
+    public function setEmail(string $email)
+    {
+        $this->request["email"]["email"] = $email;
+    }
 
     /** 
      * Change the user data and sends the data to Zitadel

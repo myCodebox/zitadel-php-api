@@ -192,7 +192,7 @@ class Create
     /**
      * Create the new user and sends the data to Zitadel
      * 
-     * @return void
+     * @return string zitadel_user_id
      * @throws Exception Returns an exception with an error code and a message if the communication with Zitadel fails
      */
     public function create()
@@ -222,5 +222,7 @@ class Create
         if (isset($response->code)) {
             throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
         }
+
+        return $response->userId;
     }
 }
