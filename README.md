@@ -1,4 +1,4 @@
-# Zitadel PHP API version 1.1.1
+# Zitadel PHP API version 1.1.2
 
 With this library you can easily communicate between your PHP projects and Zitadel over a serviceUser. The wrapper is based on the [Zitadel API](https://zitadel.com/docs/apis/introduction/).
 
