@@ -9,7 +9,7 @@ use Exception;
  */
 class Password
 {
-    private array $settings;
+    protected array $settings;
     private int $userid;
     private array $request;
     private string $verifyCode;
@@ -90,6 +90,7 @@ class Password
     public function change(): bool
     {
         $token = $this->settings["serviceUserToken"];
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/password",
@@ -127,6 +128,7 @@ class Password
     public function requestVerifyCode()
     {
         $token = $this->settings["serviceUserToken"];
+        
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/password_reset",

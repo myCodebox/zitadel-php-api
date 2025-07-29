@@ -9,7 +9,7 @@ use Exception;
  */
 class Phone
 {
-    private array $settings;
+    protected array $settings;
     private int $userid;
     private string $returnedVerificationCode;
 
@@ -92,8 +92,9 @@ class Phone
      */
     public function resendVerificationCode()
     {
-        $curl = curl_init();
         $token = $this->settings["serviceUserToken"];
+
+        $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/phone/resend",
             CURLOPT_RETURNTRANSFER => true,
@@ -127,8 +128,8 @@ class Phone
     public function verify(string $verifyCode): bool
     {
         $token = $this->settings["serviceUserToken"];
-        $curl = curl_init();
 
+        $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/phone/verify",
             CURLOPT_RETURNTRANSFER => true,

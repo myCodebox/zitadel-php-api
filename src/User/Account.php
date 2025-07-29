@@ -9,7 +9,7 @@ use Exception;
  */
 class Account
 {
-    private array $settings;
+    protected array $settings;
     private int $userid;
     private string $action;
 
@@ -94,8 +94,8 @@ class Account
     private function request(): void
     {
         $token = $this->settings["serviceUserToken"];
+        
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/$this->action",
             CURLOPT_RETURNTRANSFER => true,

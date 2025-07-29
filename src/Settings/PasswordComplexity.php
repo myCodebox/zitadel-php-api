@@ -9,7 +9,7 @@ use Exception;
  */
 class PasswordComplexity
 {
-    private array $settings;
+    protected array $settings;
     private ?string $orgId = null;
     private ?int $minLength;
     private bool $rawPasswordSettings;
@@ -119,6 +119,7 @@ class PasswordComplexity
     public function sendRequest(): void
     {
         $token = $this->settings["serviceUserToken"];
+        
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/settings/password/complexity?ctx.orgId=" . $this->orgId,

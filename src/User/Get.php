@@ -9,7 +9,7 @@ use Exception;
  */
 class Get
 {
-    private array $settings;
+    protected array $settings;
     private int $userid;
     private string $userState;
     private string $userName;
@@ -33,7 +33,7 @@ class Get
      * 
      * @param $settings array The settings array
      */
-    public function __construct(array $settings)
+    public function __construct(array $settings = [])
     {
         $this->settings = $settings;
     }
@@ -218,6 +218,7 @@ class Get
     public function fetch()
     {
         $token = $this->settings["serviceUserToken"];
+        
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid",

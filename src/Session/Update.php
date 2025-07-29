@@ -12,7 +12,7 @@ use Exception;
  */
 class Update
 {
-    private array $settings;
+    protected array $settings;
     private string $sessionId;
     private string $smsCode;
     private string $emailCode;

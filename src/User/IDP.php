@@ -9,7 +9,7 @@ use Exception;
  */
 class IDP
 {
-    private array $settings;
+    protected array $settings;
     private int $userid;
     private string $idpId;
     private string $idpToken;
@@ -212,6 +212,7 @@ class IDP
     public function startFlow()
     {
         $token = $this->settings["userToken"];
+
         $curl = curl_init();
         $request = array(
             "idpId" => $this->idpId,
@@ -256,6 +257,7 @@ class IDP
     public function fetchIdpData()
     {
         $token = $this->settings["userToken"];
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/idp_intents/$this->idpIntentId",
@@ -302,6 +304,7 @@ class IDP
     public function linkIdpToUser()
     {
         $token = $this->settings["serviceUserToken"];
+        
         $request = array(
             "idpLink" => array(
                 "idpId" => $this->idpId,

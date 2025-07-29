@@ -11,7 +11,7 @@ use Exception;
  */
 class Get
 {
-    private array $settings;
+    protected array $settings;
     private string $sessionId;
     private string $sessionToken;
     private string $creationDate;

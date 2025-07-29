@@ -9,7 +9,7 @@ use Exception;
  */
 class Create
 {
-    private array $settings;
+    protected array $settings;
     private array $request;
 
     /**
@@ -198,6 +198,7 @@ class Create
     public function create()
     {
         $token = $this->settings["serviceUserToken"];
+        
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/human",

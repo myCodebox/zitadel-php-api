@@ -9,7 +9,7 @@ use Exception;
  */
 class LoginSettings
 {
-    private array $settings;
+    protected array $settings;
     private ?string $orgId = null;
     private bool $allowUsernamePassword;
     private bool $allowRegister;
@@ -145,6 +145,7 @@ class LoginSettings
     public function sendRequest(): void
     {
         $token = $this->settings["serviceUserToken"];
+        
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/settings/login?ctx.orgId=" . $this->orgId,

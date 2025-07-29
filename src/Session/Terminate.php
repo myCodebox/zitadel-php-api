@@ -9,7 +9,7 @@ use Exception;
  */
 class Terminate
 {
-    private array $settings;
+    protected array $settings;
     private string $sessionId;
     private string $sessionToken;
 

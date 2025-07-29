@@ -9,7 +9,7 @@ use Exception;
  */
 class Avatar
 {
-    private array $settings;
+    protected array $settings;
     private int $userid;
     private String $boundary;
     private String $postData;
@@ -82,8 +82,8 @@ class Avatar
     public function add()
     {
         $token = $this->settings["userToken"];
-        $curl = curl_init();
 
+        $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/assets/v1/users/me/avatar",
             CURLOPT_RETURNTRANSFER => true,
@@ -121,8 +121,8 @@ class Avatar
     public function remove()
     {
         $token = $this->settings["serviceUserToken"];
+        
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/management/v1/users/$this->userid/avatar",
             CURLOPT_RETURNTRANSFER => true,

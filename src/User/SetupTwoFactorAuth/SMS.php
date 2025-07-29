@@ -9,7 +9,7 @@ use Exception;
  */
 class SMS
 {
-    private array $settings;
+    protected array $settings;
     private int $userid;
 
     /** Initialize the SMS OTP setup
@@ -54,8 +54,8 @@ class SMS
     private function request()
     {
         $token = $this->settings["userToken"];
+        
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/otp_sms",
             CURLOPT_RETURNTRANSFER => true,

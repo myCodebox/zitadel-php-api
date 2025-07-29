@@ -9,7 +9,7 @@ use Exception;
  */
 class Email
 {
-    private array $settings;
+    protected array $settings;
     private int $userid;
     private string $returnedVerificationCode;
 
@@ -78,7 +78,7 @@ class Email
 
         $response = json_decode(curl_exec($curl));
         curl_close($curl);
-        
+
         if (isset($response->code)) {
             throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
         } else {
@@ -94,8 +94,9 @@ class Email
      */
     public function resendVerificationCode()
     {
-        $curl = curl_init();
         $token = $this->settings["serviceUserToken"];
+
+        $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/email/resend",
             CURLOPT_RETURNTRANSFER => true,
@@ -125,6 +126,43 @@ class Email
     }
 
     /** 
+     * Get a new Verification code
+     * 
+     * @return void
+     * @throws Exception Returns an exception with an error code and a message if the communication with Zitadel fails
+     */
+    public function sendVerificationCode()
+    {
+        $token = $this->settings["serviceUserToken"];
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/email/send",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '{}',
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Accept: application/json",
+                "Authorization: Bearer $token"
+            ),
+        ));
+
+        $response = json_decode(curl_exec($curl));
+        curl_close($curl);
+
+        if (isset($response->code)) {
+            throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
+        } else {
+            $this->returnedVerificationCode = $response->verificationCode;
+        }
+    }
+
+    /** 
      * Verifies an email address with a verification code
      * 
      * @param $verifyCode string Verification Code
@@ -133,8 +171,8 @@ class Email
     public function verify(string $verifyCode): bool
     {
         $token = $this->settings["serviceUserToken"];
-        $curl = curl_init();
 
+        $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/email/verify",
             CURLOPT_RETURNTRANSFER => true,

@@ -10,7 +10,7 @@ use Exception;
  */
 class Edit
 {
-    private array $settings;
+    protected array $settings;
     private int $userid;
     private array $request;
 
@@ -116,6 +116,7 @@ class Edit
     public function edit()
     {
         $token = $this->settings["serviceUserToken"];
+        
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/human/$this->userid",

@@ -12,7 +12,7 @@ use Exception;
  */
 class Create
 {
-    private array $settings;
+    protected array $settings;
     private string $sessionId;
     private string $sessionToken;
     private string $smsCode;

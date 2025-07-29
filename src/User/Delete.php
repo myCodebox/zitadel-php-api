@@ -12,7 +12,7 @@ use Exception;
  */
 class Delete
 {
-    private array $settings;
+    protected array $settings;
     private int $userid;
 
     /** 
@@ -45,6 +45,7 @@ class Delete
     public function delete()
     {
         $token = $this->settings["serviceUserToken"];
+        
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid",

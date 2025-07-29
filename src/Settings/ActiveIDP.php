@@ -6,7 +6,7 @@ use Exception;
 
 class ActiveIDP
 {
-    private array $settings;
+    protected array $settings;
     private ?string $orgId = null;
     private array $identityProviders;
 
@@ -28,6 +28,7 @@ class ActiveIDP
     public function sendRequest(): void
     {
         $token = $this->settings["serviceUserToken"];
+        
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/settings/login/idps?ctx.orgId=" . $this->orgId,

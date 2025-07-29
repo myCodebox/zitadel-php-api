@@ -10,7 +10,7 @@ use chillerlan\QRCode\QRCode;
  */
 class TOTP
 {
-    private array $settings;
+    protected array $settings;
     private int $userid;
     private string $secret;
     private string $totpUri;
@@ -65,8 +65,8 @@ class TOTP
     public function start()
     {
         $token = $this->settings["userToken"];
-        $curl = curl_init();
 
+        $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/totp",
             CURLOPT_RETURNTRANSFER => true,
@@ -101,8 +101,8 @@ class TOTP
     public function verify($verifyCode): bool
     {
         $token = $this->settings["userToken"];
-        $curl = curl_init();
 
+        $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/totp/verify",
             CURLOPT_RETURNTRANSFER => true,

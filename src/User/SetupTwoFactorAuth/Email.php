@@ -9,7 +9,7 @@ use Exception;
  */
 class Email
 {
-    private array $settings;
+    protected array $settings;
     private int $userid;
 
     /** 
@@ -65,8 +65,8 @@ class Email
     private function request(string $action)
     {
         $token = $this->settings["userToken"];
-        $curl = curl_init();
 
+        $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/otp_email",
             CURLOPT_RETURNTRANSFER => true,
