@@ -128,7 +128,9 @@ class Create
     public function setEmail(string $email, bool $isVerified = false): void
     {
         $this->request["email"]["email"] = $email;
-        $this->request["email"]["isVerified"] = $isVerified;
+        if($isVerified) {
+            $this->request["email"]["isVerified"] = $isVerified;
+        }
     }
 
     /**
@@ -141,7 +143,9 @@ class Create
     public function setPhone(string $phone, bool $isVerified = false): void
     {
         $this->request["phone"]["phone"] = $phone;
-        $this->request["phone"]["isVerified"] = $isVerified;
+        if($isVerified) {
+            $this->request["phone"]["isVerified"] = $isVerified;
+        }
     }
 
     /**
