@@ -128,7 +128,7 @@ class Password
     public function requestVerifyCode()
     {
         $token = $this->settings["serviceUserToken"];
-        
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/password_reset",
@@ -156,6 +156,46 @@ class Password
             throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
         } else {
             $this->verifyCode = $response->verificationCode;
+        }
+    }
+
+    /**
+     * Request reset link for password reset
+     * 
+     * @return void
+     * @throws Exception Returns an exception with an error code and a message if the communication with Zitadel fails
+     */
+    public function sendResetLink()
+    {
+        $token = $this->settings["serviceUserToken"];
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/password_reset",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => "{
+            \"sendLink\": {
+                \"notificationType\": \"NOTIFICATION_TYPE_Unspecified\"
+            }
+        }",
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Accept: application/json",
+                "Authorization: Bearer $token"
+            ),
+        ));
+
+        $response = json_decode(curl_exec($curl));
+        curl_close($curl);
+
+        if (isset($response->code)) {
+            throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
         }
     }
 }

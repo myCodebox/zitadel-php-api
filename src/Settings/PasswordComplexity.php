@@ -12,7 +12,7 @@ class PasswordComplexity
     protected array $settings;
     private ?string $orgId = null;
     private ?int $minLength;
-    private bool $rawPasswordSettings;
+    private array $rawPasswordSettings;
     private bool $requiresUppercase;
     private bool $requiresLowercase;
     private bool $requiresNumber;
@@ -103,9 +103,9 @@ class PasswordComplexity
     /**
      * Returns the raw password settings as a JSON string.
      *
-     * @return string The raw password settings as a JSON string.
+     * @return array The raw password settings as a JSON string.
      */
-    public function getRawPasswoerdSettings(): string
+    public function getRawPasswordSettings(): array
     {
         return $this->rawPasswordSettings;
     }
@@ -119,7 +119,7 @@ class PasswordComplexity
     public function sendRequest(): void
     {
         $token = $this->settings["serviceUserToken"];
-        
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/v2/settings/password/complexity?ctx.orgId=" . $this->orgId,
@@ -144,7 +144,7 @@ class PasswordComplexity
             throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
         } else {
             $response = $response->settings;
-            $this->rawPasswordSettings = $response ?? "";
+            $this->rawPasswordSettings = (array) $response ?? [];
             $this->minLength = $response->minLength ?? null;
             $this->requiresUppercase = $response->requiresUppercase ?? "";
             $this->requiresLowercase = $response->requiresLowercase ?? "";
