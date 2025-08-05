@@ -43,7 +43,7 @@ class Metadata
      * @return array
      * @throws Exception Returns an exception with an error code and a message if the communication with Zitadel fails
      */
-    public function getMetadata() : array
+    public function getMetaData() : array
     {
         return $this->metadata;
     }
@@ -71,9 +71,12 @@ class Metadata
      */
     public function queryMetaDataKey(string $key): void
     {
-        $this->delete_request["metadata"][] = [
-            "key" => $key
-        ];
+        // API v2
+        // $this->delete_request["metadata"][] = [
+        //     "key" => $key
+        // ];
+
+        $this->delete_request["keys"][] = $key;
     }
     
     /**
@@ -87,7 +90,12 @@ class Metadata
     public function setPagination(int $offset = 0, int $limit = 0, bool $asc = false): void
     {
         if($limit > 0){
-            $this->list_request["pagination"] = [
+            // $this->list_request["pagination"] = [
+            //     "offset" => $offset,
+            //     "limit" => $limit,
+            //     "asc" => $asc
+            // ];
+            $this->list_request["query"] = [
                 "offset" => $offset,
                 "limit" => $limit,
                 "asc" => $asc
@@ -102,11 +110,19 @@ class Metadata
      * @param $offset string
      * @return void
      */
-    public function setFilters(string $key, string $method): void
+    public function setFilters(string $key, string $method = "TEXT_QUERY_METHOD_EQUALS"): void
     {
-        $this->list_request["filters"][]["keyfilter"] = [
-            "key" => $key,
-            "method" => $method,
+        // $this->list_request["filters"][] = [
+        //     "keyFilter" => [
+        //         "key" => $key,
+        //         "method" => $method,
+        //     ]
+        // ];
+        $this->list_request["queries"][] = [
+            "keyQuery" => [
+                "key" => $key,
+                "method" => $method,
+            ]
         ];
     }
 
@@ -119,10 +135,11 @@ class Metadata
     public function requestMetaData()
     {
         $token = $this->settings["serviceUserToken"];
-        
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/metadata",
+            // CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/metadata",
+            CURLOPT_URL => $this->settings["domain"] . "/management/v1/users/$this->userid/metadata/_search",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -130,7 +147,7 @@ class Metadata
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode($this->list_request ?? ""),
+            CURLOPT_POSTFIELDS => (isset($this->list_request)) ? json_encode($this->list_request) : "{}",
             CURLOPT_HTTPHEADER => array(
                 "Accept: application/json",
                 "Authorization: Bearer $token"
@@ -142,7 +159,8 @@ class Metadata
         if (isset($response->code)) {
             throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
         }else{
-            $this->metadata = $response->metadata;
+            // $this->metadata = $response->metadata;
+            $this->metadata = $response->result ?? [];
         }
     }
 
@@ -158,7 +176,8 @@ class Metadata
         
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/metadata",
+            // CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/metadata",
+            CURLOPT_URL => $this->settings["domain"] . "/management/v1/users/$this->userid/metadata/_bulk",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -193,7 +212,8 @@ class Metadata
         
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/metadata",
+            // CURLOPT_URL => $this->settings["domain"] . "/v2/users/$this->userid/metadata",
+            CURLOPT_URL => $this->settings["domain"] . "/management/v1/users/$this->userid/metadata/_bulk",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,

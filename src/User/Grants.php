@@ -14,6 +14,8 @@ class Grants
     private int $userid;
     private string $grantId;
     private array $request;
+    private array $activeRoleKeys = [];
+    private array $removeRoleKeys = [];
 
     /** 
      * Initialize the user data change. Important: To change the email address or the password, use the Email or Password Class!
@@ -82,6 +84,17 @@ class Grants
     }
 
     /** 
+     * remove the grant role
+     * 
+     * @param $role string
+     * @return void
+     */
+    public function removeRoleKey(string $role)
+    {
+        $this->removeRoleKeys[] = $role;
+    }
+
+    /** 
      * Set given roels to user in Zitadel
      * 
      * @return void
@@ -89,33 +102,51 @@ class Grants
      */
     public function grantRoles()
     {
-        $token = $this->settings["serviceUserToken"];
-        
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->settings["domain"] . "/management/v1/users/$this->userid/grants",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode($this->request),
-            CURLOPT_HTTPHEADER => array(
-                "Accept: application/json",
-                "Authorization: Bearer $token"
-            )
-        ));
-        $response = json_decode(curl_exec($curl));
-        curl_close($curl);
+        $roleKeyArray = [];
 
-        if (isset($response->code) && $response->code != 6) {
-            throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
+        // get all roles
+        $this->getGrantsByUserId();
+
+        // remove roles
+        foreach ($this->activeRoleKeys as $roleKey) {
+            if (!in_array($roleKey, $this->removeRoleKeys)) {
+                $roleKeyArray[] = $roleKey;
+            }
         }
-        if (isset($response->code) && $response->code == 6) {
-            $this->getGrantsByUserId();
-            $this->updateGrantById();
+
+        // add new to existing roleKeys
+        $this->request["roleKeys"] = array_unique(array_merge($roleKeyArray, $this->request["roleKeys"] ?? []));
+
+        if (!empty($this->request["roleKeys"])) {
+
+            // set roles for user
+            $token = $this->settings["serviceUserToken"];
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $this->settings["domain"] . "/management/v1/users/$this->userid/grants",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode($this->request),
+                CURLOPT_HTTPHEADER => array(
+                    "Accept: application/json",
+                    "Authorization: Bearer $token"
+                )
+            ));
+            $response = json_decode(curl_exec($curl));
+            curl_close($curl);
+
+            if (isset($response->code) && $response->code != 6) {
+                throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
+            }
+            if (isset($response->code) && $response->code == 6) {
+                $this->updateGrantById();
+            }
         }
     }
 
@@ -128,9 +159,9 @@ class Grants
     public function getGrantsByUserId()
     {
         $token = $this->settings["serviceUserToken"];
-        
+
         $curl = curl_init();
-         curl_setopt_array($curl, array(
+        curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/management/v1/users/grants/_search",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
@@ -143,7 +174,7 @@ class Grants
                 "queries": [
                     {
                         "userIdQuery": {
-                            "userId": "'.$this->userid.'"
+                            "userId": "' . $this->userid . '"
                         }
                     }
                 ]
@@ -159,15 +190,21 @@ class Grants
 
         if (isset($response->code)) {
             throw new Exception("Error-Code: " . $response->code . " Message: " . $response->message);
-        }else{
-            foreach($response->result as $grant){
-                if($grant->projectId == $this->request["projectId"]){
-                    $this->grantId = $response->result[0]->id;
+        } else {
+            if (isset($response->result)) {
+                foreach ($response->result as $grant) {
+                    if ($grant->projectId == $this->request["projectId"]) {
+                        $this->grantId = $grant->id;
+
+                        if (isset($grant->roleKeys)) {
+                            $this->activeRoleKeys = $grant->roleKeys;
+                        }
+                    }
                 }
             }
         }
     }
-    
+
     /** 
      * Set given roels to user in Zitadel
      * 
@@ -177,7 +214,7 @@ class Grants
     public function updateGrantById()
     {
         $token = $this->settings["serviceUserToken"];
-        
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->settings["domain"] . "/management/v1/users/$this->userid/grants/$this->grantId",
